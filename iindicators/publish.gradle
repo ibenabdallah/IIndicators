@@ -1,0 +1,87 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+// If you want to publish your sources as well
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        // For Android libraries
+        from android.sourceSets.main.java.srcDirs
+        from android.sourceSets.main.kotlin.srcDirs
+    } else {
+        // For pure Kotlin libraries, in case you have them
+        from sourceSets.main.java.srcDirs
+        from sourceSets.main.kotlin.srcDirs
+    }
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+group = GROUP_ID
+version = VERSION
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+
+                groupId GROUP_ID
+                artifactId ARTIFACT_ID
+                version VERSION
+
+                // Two artifacts, the `aar` (or `jar`) and the sources
+                if (project.plugins.findPlugin("com.android.library")) {
+                    from components.release
+                } else {
+                    from components.java
+                }
+
+                artifact androidSourcesJar
+                //artifact javadocJar
+
+                pom {
+                    name = ARTIFACT_ID
+                    description = 'is a jetpack Compose library that will help you show indicators in your app'
+                    url = SITE_URL
+                    licenses {
+                        // Your licensing information
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'ibenabdallah'
+                            name = 'Benabdallah Ismail'
+                            email = 'benabdallahismail121@gmail.com'
+                        }
+                        // More developers if any...
+                    }
+
+                    scm {
+                        connection = 'scm:git:github.com/ibenabdallah/IIndicators.git'
+                        developerConnection = 'scm:git:ssh://github.com/ibenabdallah/IIndicators.git'
+                        url = 'https://github.com/ibenabdallah/IIndicators/tree/main'
+                    }
+                }
+            }
+        }
+    }
+}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def keyId = properties.getProperty('signing.keyId')
+def passwordOss = properties.getProperty('signing.password')
+def profileId = properties.getProperty('signing.key')
+
+signing {
+    useInMemoryPgpKeys(
+            keyId,
+            profileId,
+            passwordOss,
+    )
+    sign publishing.publications
+}

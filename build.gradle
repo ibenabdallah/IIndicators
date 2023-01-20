@@ -1,0 +1,36 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        GROUP_ID = 'io.github.ibenabdallah'// your project id registered in Sonatype
+        ARTIFACT_ID = 'iindicators'// name of your library
+        VERSION = '1.0.0'
+        SITE_URL = 'https://github.com/ibenabdallah/IIndicators'
+        GIT_URL = 'https://github.com/ibenabdallah/IIndicators.git'
+    }
+}
+plugins {
+    id 'com.android.application' version '7.4.0' apply false
+    id 'com.android.library' version '7.4.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.7.20' apply false
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+
+}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def usernameOss = properties.getProperty('ossrhUsername')
+def passwordOss = properties.getProperty('ossrhPassword')
+def profileId = properties.getProperty('sonatypeStagingProfileId')
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = usernameOss
+            password = passwordOss
+            stagingProfileId = profileId
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+
+        }
+    }
+}
+
