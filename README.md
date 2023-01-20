@@ -1,11 +1,11 @@
 
-# QIndicators 
+# IIndicators 
 
 is a jetpack Compose library will help you showing indicators in your app within buttons, pagers everywhere. 
 
 
 ## Demo
-<img src="https://user-images.githubusercontent.com/30949634/211209733-52460b9a-8076-43a7-80fe-5c2c8c96e2db.gif" width="30%" height="30%"/>
+<img src="https://user-images.githubusercontent.com/8763140/213685184-7e1fe87b-bdc7-475b-930c-ec9f2c56ea66.gif" width="30%" height="30%"/>
 
 ## Download
 

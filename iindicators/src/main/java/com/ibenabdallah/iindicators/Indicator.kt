@@ -4,12 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -68,15 +63,14 @@ private fun IndicatorView(
         targetValue = if (isSelected) selectedLength.dp else size.dp,
         animationSpec = tween(durationMillis = 1000)
     )
-    Row {
-        Box(
-            modifier = Modifier
-                .size(width = width, height = size.dp)
-                .clip(CircleShape)
-                .background(color)
-        )
-        Spacer(modifier = Modifier.width(spacer.dp))
-    }
+
+    Box(
+        modifier = Modifier
+            .padding(horizontal = spacer.dp / 2)
+            .size(width = width, height = size.dp)
+            .clip(CircleShape)
+            .background(color)
+    )
 }
 
 @Preview(showBackground = true)
@@ -89,7 +83,9 @@ fun MainScreenPreview() {
         spacer = 5,
         selectedColor = Color.Red,
         unselectedColor = Color.Blue,
-        modifier = Modifier,
+        modifier = Modifier
+            .background(Color.White)
+            .padding(vertical = 5.dp),
         selectedIndex = 2
     )
 
